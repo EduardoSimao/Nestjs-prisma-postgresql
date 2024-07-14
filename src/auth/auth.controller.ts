@@ -36,12 +36,12 @@ export class AuthController{
 
     @Post('forget')
     async forgot (@Body() {email}: AuthForgetDTO){
-        this.authService.forget(email);
+        return this.authService.forget(email);
     }
 
     @Post('reset')
     async reset(@Body() {password, token}: AuthResetDTO){
-        this.authService.reset(password, token);
+        return this.authService.reset(password, token);
     }
 
     @UseGuards(AuthGuard)
