@@ -1,35 +1,27 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { FileService } from "./file.service";
-import { getPhoto } from "../testing/get-photo.mock";
+import { Test, TestingModule } from '@nestjs/testing';
+import { FileService } from './file.service';
+import { getPhoto } from '../testing/get-photo.mock';
 
+describe('FilesService', () => {
+  let filesdervice: FileService;
 
-describe('FilesService', () =>{
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [FileService],
+    }).compile();
 
-    let filesdervice: FileService
+    filesdervice = module.get<FileService>(FileService);
+  });
 
-    beforeEach(async () => {
+  test('Validate definition', () => {
+    expect(filesdervice).toBeDefined();
+  });
 
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [
-                FileService
-            ]
-        }).compile();
-
-        filesdervice = module.get<FileService>(FileService);
-
+  describe('FileService Test', () => {
+    test('Upload method test', async () => {
+      const photo = await getPhoto();
+      const filename = 'photo-test.jpeg';
+      filesdervice.Upload(photo, filename);
     });
-
-    test('Validate definition', () => {
-        expect(filesdervice).toBeDefined();
-    })
-
-    describe('FileService Test', () =>{
-
-        test('Upload method test', async () =>{
-            
-            const photo = await getPhoto();
-            const filename = 'photo-test.jpeg';
-            filesdervice.Upload(photo, filename);
-        })
-    })
-})
+  });
+});

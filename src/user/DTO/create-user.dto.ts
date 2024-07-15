@@ -1,26 +1,29 @@
-import { IsDateString, IsEmail, IsEnum, IsOptional, IsString, IsStrongPassword } from "class-validator";
-import { Role } from "../../enums/role.enum";
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
+import { Role } from '../../enums/role.enum';
 
+export class CreateUserDTO {
+  @IsString()
+  name: string;
 
-export class CreateUserDTO{
+  @IsEmail()
+  email: string;
 
-    @IsString()
-    name: string;
+  @IsStrongPassword({
+    minLength: 6,
+    minNumbers: 0,
+    minLowercase: 0,
+    minUppercase: 0,
+    minSymbols: 0,
+  })
+  password: string;
 
-    @IsEmail()
-    email: string;
-
-    @IsStrongPassword({
-        minLength: 6,
-        minNumbers: 0,
-        minLowercase: 0,
-        minUppercase: 0,
-        minSymbols: 0
-    })
-    password: string;
-
-    @IsOptional()
-    @IsEnum(Role)
-    role?: number;
-
+  @IsOptional()
+  @IsEnum(Role)
+  role?: number;
 }

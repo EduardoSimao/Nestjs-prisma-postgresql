@@ -1,21 +1,18 @@
-import { createReadStream } from "fs";
+import { createReadStream } from 'fs';
 
-export const getFileToBuffer = (filename: string) =>{
+export const getFileToBuffer = (filename: string) => {
+  const readStream = createReadStream(filename);
+  const chunks = [];
 
-    const readStream = createReadStream(filename);
-    const chunks = [];
+  return new Promise<{ buffer; stream }>((resolve, reject) => {
+    readStream.on('data', (chunk) => chunks.push(chunk));
+    readStream.on('error', (err) => reject(err));
 
-
-    return new Promise<{buffer, stream}>((resolve, reject) => {
-        readStream.on('data', chunk => chunks.push(chunk));
-        readStream.on('error', (err) => reject(err));
-
-        readStream.on('close', () => {
-            resolve({
-                buffer: Buffer.concat(chunks) as Buffer,
-                stream: readStream
-            })
-        })
-        
+    readStream.on('close', () => {
+      resolve({
+        buffer: Buffer.concat(chunks) as Buffer,
+        stream: readStream,
+      });
     });
-}
+  });
+};

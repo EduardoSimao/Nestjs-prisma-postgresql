@@ -5,25 +5,25 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import {PugAdapter} from '@nestjs-modules/mailer/dist/adapters/pug.adapter'
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: process.env.ENV === 'test' ? '.env.test' : '.env'
+      envFilePath: process.env.ENV === 'test' ? '.env.test' : '.env',
     }),
-    forwardRef(() => UserModule), 
+    forwardRef(() => UserModule),
     forwardRef(() => AuthModule),
     MailerModule.forRoot({
       transport: {
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-            user: 'johnathon14@ethereal.email',
-            pass: 'RjCytjtHpcahw9rD37'
-    }
+          user: 'johnathon14@ethereal.email',
+          pass: 'RjCytjtHpcahw9rD37',
+        },
       },
       defaults: {
         from: '"Eduardo" <johnathon14@ethereal.email>',
@@ -33,8 +33,8 @@ import { UserEntity } from './user/entity/user.entity';
         adapter: new PugAdapter(),
         options: {
           strict: true,
-        }
-      }
+        },
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -43,13 +43,12 @@ import { UserEntity } from './user/entity/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities:[UserEntity],
-      synchronize: process.env.ENV === "development"
-
-    })
+      entities: [UserEntity],
+      synchronize: process.env.ENV === 'development',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
-  exports: [AppService]
+  exports: [AppService],
 })
 export class AppModule {}

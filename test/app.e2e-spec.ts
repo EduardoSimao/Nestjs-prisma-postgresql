@@ -20,9 +20,9 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  afterEach(() =>{
+  afterEach(() => {
     app.close();
-  })
+  });
 
   it('/ (GET)', () => {
     return request(app.getHttpServer())
@@ -45,14 +45,13 @@ describe('AppController (e2e)', () => {
       .post('/auth/login')
       .send({
         email: authRegisterDTOMock.email,
-        password: authRegisterDTOMock.password
+        password: authRegisterDTOMock.password,
       });
 
     expect(response.statusCode).toEqual(201);
     expect(typeof response.body.accessToken).toEqual('string');
 
     accessToken = response.body.accessToken;
-   
   });
 
   it('OK - Get User data', async () => {
@@ -69,14 +68,16 @@ describe('AppController (e2e)', () => {
   it('NOK - Create User as ADMIN', async () => {
     const response = await request(app.getHttpServer())
       .post('/auth/register')
-      .send({...authRegisterDTOMock, role: Role.Admin, email:'testadm@adm.com'});
+      .send({
+        ...authRegisterDTOMock,
+        role: Role.Admin,
+        email: 'testadm@adm.com',
+      });
 
     expect(response.statusCode).toEqual(201);
     expect(typeof response.body.accessToken).toEqual('string');
-    
+
     accessToken = response.body.accessToken;
-
-
   });
 
   it('NOK - Get User and validate Role', async () => {
@@ -90,8 +91,6 @@ describe('AppController (e2e)', () => {
     expect(response.body.role).toEqual(Role.User);
 
     userId = response.body.id;
-
-    
   });
 
   it('NOK - Get all Users with Role User', async () => {
@@ -102,23 +101,24 @@ describe('AppController (e2e)', () => {
 
     expect(response.statusCode).toEqual(403);
     expect(response.body.error).toEqual('Forbidden');
-
   });
 
   it('OK - Change user role to Admin', async () => {
     const ds = await dataSource.initialize();
 
     const queryRunner = ds.createQueryRunner();
-    await queryRunner.query(`UPDATE users SET role = ${Role.Admin} WHERE id = ${userId}`);
+    await queryRunner.query(
+      `UPDATE users SET role = ${Role.Admin} WHERE id = ${userId}`,
+    );
 
-    const rows = await queryRunner.query(`SELECT * FROM users WHERE id = ${userId}`);
+    const rows = await queryRunner.query(
+      `SELECT * FROM users WHERE id = ${userId}`,
+    );
 
-    dataSource.destroy(); 
-    
+    dataSource.destroy();
+
     expect(rows.length).toEqual(1);
     expect(rows[0].role).toEqual(Role.Admin);
-
-    
   });
 
   it('OK - Get all Users with Role User', async () => {
@@ -129,7 +129,5 @@ describe('AppController (e2e)', () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.length).toEqual(2);
-
   });
-
 });
