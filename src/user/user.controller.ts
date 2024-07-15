@@ -3,11 +3,11 @@ import { CreateUserDTO } from "./DTO/create-user.dto";
 import { UpdateUserDTO } from "./DTO/update-user.dto";
 import { UpdatePatchUserDTO } from "./DTO/update-patch-user.dto";
 import { UserService } from "./user.service";
-import { ParamID } from "src/decorators/param-id.decorator";
-import { Roles } from "src/decorators/role.decorator";
-import { Role } from "src/enums/role.enum";
-import { RoleGuard } from "src/guards/role.guard";
-import { AuthGuard } from "src/guards/auth.guard";
+import { Role } from "../enums/role.enum";
+import { AuthGuard } from "../guards/auth.guard";
+import { RoleGuard } from "../guards/role.guard";
+import { Roles } from "../decorators/role.decorator";
+import { ParamID } from "../decorators/param-id.decorator";
 
 //@UseInterceptors(LogInterceptor)
 @Roles(Role.Admin)
