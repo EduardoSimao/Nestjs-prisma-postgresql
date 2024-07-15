@@ -33,8 +33,8 @@ export class UserEntity {
     role:      number
         
     @CreateDateColumn()    
-    createdat?: Date
+    createdAt?: Date
         
     @UpdateDateColumn()
-    updatedat?: Date
+    updatedAt?: Date
 }
