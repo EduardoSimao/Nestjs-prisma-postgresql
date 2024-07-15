@@ -1,22 +1,20 @@
-import { BadRequestException, Body, Controller, FileTypeValidator, Head, Headers, MaxFileSizeValidator, ParseFilePipe, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Controller, FileTypeValidator, MaxFileSizeValidator, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthLoginDTO } from "./dto/auth-login.dto";
 import { AuthRegisterDTO } from "./dto/auth-register.dto";
 import { AuthForgetDTO } from "./dto/auth-forget.dto";
 import { AuthResetDTO } from "./dto/auth-reset.dto";
 import { AuthService } from "./auth.service";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { join } from "path";
-import { UserService } from "../user/user.service";
 import { FileService } from "../file/file.service";
 import { AuthGuard } from "../guards/auth.guard";
 import { User } from "../decorators/user-id.decorator";
+import { UserEntity } from "../user/entity/user.entity";
 
 
 @Controller('auth')
 export class AuthController{
 
     constructor(
-        private readonly userService: UserService,
         private readonly authService: AuthService,
         private readonly fileService: FileService
     ){}
@@ -45,9 +43,9 @@ export class AuthController{
 
     @UseGuards(AuthGuard)
     @Post('me')
-    async me(@User() user){
+    async me(@User() user: UserEntity){
 
-        return {user};
+        return user;
 
     }
 
@@ -55,7 +53,7 @@ export class AuthController{
     @UseGuards(AuthGuard)
     @Post('photo')
     async photo(
-        @User() user, 
+        @User() user: UserEntity, 
         @UploadedFile(new ParseFilePipe({
             validators: [
                 new FileTypeValidator({fileType: 'image/jpeg'}),
