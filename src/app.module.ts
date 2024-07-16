@@ -8,6 +8,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
+import { ProducModule } from './product/product.module';
+import { ProductEntity } from './product/entity/product.entity';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { UserEntity } from './user/entity/user.entity';
     }),
     forwardRef(() => UserModule),
     forwardRef(() => AuthModule),
+    forwardRef(() => ProducModule),
     MailerModule.forRoot({
       transport: {
         host: 'smtp.ethereal.email',
@@ -43,7 +46,7 @@ import { UserEntity } from './user/entity/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity],
+      entities: [UserEntity, ProductEntity],
       synchronize: process.env.ENV === 'development',
     }),
   ],
