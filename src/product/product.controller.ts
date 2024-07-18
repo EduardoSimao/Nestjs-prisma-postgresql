@@ -29,13 +29,13 @@ export class ProductController {
     return this.producService.create(data);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @Get()
   async readAll() {
     return this.producService.readAll();
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @Get(':id')
   async readOne(@ParamID() id: number) {
     return this.producService.ReadOne(id);
